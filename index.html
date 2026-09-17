@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>媒體發稿追蹤系統</title>
+  <title>MEDIA MONITOR｜媒體發稿追蹤</title>
 
   <style>
     * {
@@ -21,24 +21,25 @@
     header {
       background: #222;
       color: white;
-      padding: 24px;
+      padding: 28px 20px;
     }
 
     header h1 {
-      margin: 0 0 6px;
-      font-size: 24px;
+      margin: 0;
+      font-size: 25px;
+      letter-spacing: 1px;
     }
 
     header p {
-      margin: 0;
-      opacity: 0.7;
+      margin: 7px 0 0;
+      color: #bbb;
       font-size: 14px;
     }
 
     main {
       max-width: 900px;
       margin: 30px auto;
-      padding: 0 20px;
+      padding: 0 18px;
     }
 
     .card {
@@ -50,65 +51,123 @@
     }
 
     h2 {
-      margin-top: 0;
+      margin: 0 0 20px;
       font-size: 20px;
     }
 
     label {
       display: block;
-      margin-top: 16px;
-      margin-bottom: 6px;
+      margin: 16px 0 7px;
       font-weight: 600;
       font-size: 14px;
     }
 
     input {
       width: 100%;
-      padding: 12px;
+      padding: 13px;
       border: 1px solid #ddd;
-      border-radius: 8px;
+      border-radius: 9px;
       font-size: 16px;
+      background: white;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #555;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
     }
 
     button {
-      margin-top: 20px;
-      width: 100%;
-      padding: 13px;
-      border: 0;
-      border-radius: 8px;
-      background: #222;
-      color: white;
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 9px;
       font-size: 16px;
       cursor: pointer;
+    }
+
+    .create-btn {
+      background: #222;
+      color: white;
+    }
+
+    .search-btn {
+      background: #555;
+      color: white;
     }
 
     button:hover {
       opacity: 0.85;
     }
 
-    .empty {
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .campaign-info {
+      display: none;
+      background: #f7f7f7;
+      padding: 16px;
+      border-radius: 10px;
+    }
+
+    .campaign-info strong {
+      font-size: 18px;
+    }
+
+    .status {
       text-align: center;
-      color: #888;
-      padding: 30px 10px;
+      padding: 25px;
+      color: #777;
     }
 
     .result {
-      border-top: 1px solid #eee;
-      padding: 16px 0;
+      padding: 18px 0;
+      border-bottom: 1px solid #eee;
     }
 
-    .result:first-child {
-      border-top: none;
+    .result:last-child {
+      border-bottom: none;
+    }
+
+    .media-name {
+      font-size: 13px;
+      color: #777;
+      margin-bottom: 5px;
     }
 
     .result-title {
+      font-size: 17px;
       font-weight: 600;
-      margin-bottom: 6px;
+      margin-bottom: 7px;
     }
 
-    .result-meta {
-      color: #777;
+    .result-date {
       font-size: 13px;
+      color: #999;
+      margin-bottom: 8px;
+    }
+
+    .result a {
+      color: #333;
+      font-size: 14px;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      .button-row {
+        flex-direction: column;
+      }
+
+      .card {
+        padding: 20px;
+      }
     }
   </style>
 
@@ -116,76 +175,137 @@
 
 <body>
 
-  <header>
-    <h1>MEDIA MONITOR</h1>
-    <p>媒體發稿追蹤系統</p>
-  </header>
+<header>
+  <h1>MEDIA MONITOR</h1>
+  <p>媒體發稿追蹤系統</p>
+</header>
 
-  <main>
+<main>
+
+  <section class="card">
+    <h2>建立媒體監測案件</h2>
 
 ```
-<section class="card">
-  <h2>建立通告案件</h2>
+<label>藝人／團體</label>
+<input id="artist" placeholder="例如：品怡">
 
-  <label>藝人名稱</label>
-  <input id="artist" placeholder="例如：品怡">
+<label>通告名稱</label>
+<input id="campaign" placeholder="例如：Pink Hour 專輯發行">
 
-  <label>通告名稱</label>
-  <input id="campaign" placeholder="例如：Pink Hour 專輯發行">
+<label>搜尋關鍵字</label>
+<input id="keywords" placeholder="例如：品怡、Pink Hour、迷路">
 
-  <label>搜尋關鍵字</label>
-  <input id="keywords" placeholder="例如：品怡、Pink Hour、迷路">
+<div class="button-row">
+  <button class="create-btn" onclick="createCampaign()">
+    建立案件
+  </button>
 
-  <button onclick="createCampaign()">建立案件</button>
-</section>
-
-<section class="card">
-  <h2>目前案件</h2>
-
-  <div id="campaignInfo" class="empty">
-    尚未建立案件
-  </div>
-</section>
-
-<section class="card">
-  <h2>媒體發稿結果</h2>
-
-  <div id="results" class="empty">
-    建立案件後，搜尋結果會顯示在這裡。
-  </div>
-</section>
+  <button class="search-btn" id="searchButton" onclick="searchMedia()" disabled>
+    🔍 搜尋媒體
+  </button>
+</div>
 ```
 
-  </main>
+  </section>
 
-  <script>
-    function createCampaign() {
+  <section class="card">
+    <h2>目前案件</h2>
 
-      const artist = document.getElementById("artist").value;
-      const campaign = document.getElementById("campaign").value;
-      const keywords = document.getElementById("keywords").value;
+```
+<div id="campaignInfo" class="status">
+  尚未建立案件
+</div>
+```
 
-      if (!artist || !campaign || !keywords) {
-        alert("請把三個欄位都填寫完成！");
-        return;
-      }
+  </section>
 
-      document.getElementById("campaignInfo").innerHTML = `
-        <div>
-          <strong>${artist}</strong>
-          <p>${campaign}</p>
-          <small>搜尋關鍵字：${keywords}</small>
-        </div>
-      `;
+  <section class="card">
+    <h2>媒體發稿結果</h2>
 
-      document.getElementById("results").innerHTML = `
-        <div class="empty">
-          案件已建立。<br><br>
-          下一個版本將會加入「自動搜尋媒體發稿」功能。
-        </div>
-      `;
-    }
-  </script>
+```
+<div id="results" class="status">
+  建立案件後，按「搜尋媒體」開始搜尋。
+</div>
+```
+
+  </section>
+
+</main>
+
+<script>
+
+let currentCampaign = null;
+
+
+function createCampaign() {
+
+  const artist = document.getElementById("artist").value.trim();
+  const campaign = document.getElementById("campaign").value.trim();
+  const keywords = document.getElementById("keywords").value.trim();
+
+  if (!artist || !campaign || !keywords) {
+    alert("請把三個欄位都填寫完成！");
+    return;
+  }
+
+  currentCampaign = {
+    artist: artist,
+    campaign: campaign,
+    keywords: keywords
+  };
+
+  document.getElementById("campaignInfo").style.display = "block";
+
+  document.getElementById("campaignInfo").innerHTML = `
+    <strong>${artist}</strong>
+    <p>${campaign}</p>
+    <small>搜尋關鍵字：${keywords}</small>
+  `;
+
+  document.getElementById("searchButton").disabled = false;
+
+  document.getElementById("results").innerHTML = `
+    <div class="status">
+      案件已建立。<br>
+      請按「🔍 搜尋媒體」。
+    </div>
+  `;
+}
+
+
+function searchMedia() {
+
+  if (!currentCampaign) {
+    alert("請先建立案件！");
+    return;
+  }
+
+  const results = document.getElementById("results");
+
+  results.innerHTML = `
+    <div class="status">
+      🔍 正在準備搜尋……<br><br>
+      搜尋關鍵字：${currentCampaign.keywords}
+    </div>
+  `;
+
+  setTimeout(function() {
+
+    results.innerHTML = `
+      <div class="status">
+        <strong>搜尋功能已啟動</strong>
+        <br><br>
+        目前這個版本已經完成搜尋介面。
+        <br>
+        下一步會接上真正的網路搜尋服務，
+        讓系統可以找到各大媒體的實際文章。
+      </div>
+    `;
+
+  }, 1200);
+}
+
+</script>
 
 </body>
 </html>
