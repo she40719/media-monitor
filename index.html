@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>媒體發稿追蹤系統</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", sans-serif;
+      background: #f5f5f7;
+      color: #222;
+    }
+
+    header {
+      background: #222;
+      color: white;
+      padding: 24px;
+    }
+
+    header h1 {
+      margin: 0 0 6px;
+      font-size: 24px;
+    }
+
+    header p {
+      margin: 0;
+      opacity: 0.7;
+      font-size: 14px;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 16px;
+      margin-bottom: 6px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 13px;
+      border: 0;
+      border-radius: 8px;
+      background: #222;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.85;
+    }
+
+    .empty {
+      text-align: center;
+      color: #888;
+      padding: 30px 10px;
+    }
+
+    .result {
+      border-top: 1px solid #eee;
+      padding: 16px 0;
+    }
+
+    .result:first-child {
+      border-top: none;
+    }
+
+    .result-title {
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .result-meta {
+      color: #777;
+      font-size: 13px;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <header>
+    <h1>MEDIA MONITOR</h1>
+    <p>媒體發稿追蹤系統</p>
+  </header>
+
+  <main>
+
+```
+<section class="card">
+  <h2>建立通告案件</h2>
+
+  <label>藝人名稱</label>
+  <input id="artist" placeholder="例如：品怡">
+
+  <label>通告名稱</label>
+  <input id="campaign" placeholder="例如：Pink Hour 專輯發行">
+
+  <label>搜尋關鍵字</label>
+  <input id="keywords" placeholder="例如：品怡、Pink Hour、迷路">
+
+  <button onclick="createCampaign()">建立案件</button>
+</section>
+
+<section class="card">
+  <h2>目前案件</h2>
+
+  <div id="campaignInfo" class="empty">
+    尚未建立案件
+  </div>
+</section>
+
+<section class="card">
+  <h2>媒體發稿結果</h2>
+
+  <div id="results" class="empty">
+    建立案件後，搜尋結果會顯示在這裡。
+  </div>
+</section>
+```
+
+  </main>
+
+  <script>
+    function createCampaign() {
+
+      const artist = document.getElementById("artist").value;
+      const campaign = document.getElementById("campaign").value;
+      const keywords = document.getElementById("keywords").value;
+
+      if (!artist || !campaign || !keywords) {
+        alert("請把三個欄位都填寫完成！");
+        return;
+      }
+
+      document.getElementById("campaignInfo").innerHTML = `
+        <div>
+          <strong>${artist}</strong>
+          <p>${campaign}</p>
+          <small>搜尋關鍵字：${keywords}</small>
+        </div>
+      `;
+
+      document.getElementById("results").innerHTML = `
+        <div class="empty">
+          案件已建立。<br><br>
+          下一個版本將會加入「自動搜尋媒體發稿」功能。
+        </div>
+      `;
+    }
+  </script>
+
+</body>
+</html>
